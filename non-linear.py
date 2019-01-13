@@ -3,6 +3,16 @@
 Created on Mon Nov 26 19:21:54 2018
 
 @author: Semih
+
+-Functions in this module:
+    
+#Derivative
+#Integral
+#Bisection
+#Newton-Raphson
+#Secant
+#False position
+
 """
 
 def derivative(func,n,error_percentage=1e-10):
@@ -25,12 +35,12 @@ def integral(func,a,b,seg=1e+5):
     while i<b:
         total+=abs(func(i))*inc
         i+=inc
-    return round(total,4)
+    return round(total,8)
 
 #print(derivative(lambda a:a*a -4,3))
 #print(integral(lambda a:a*a -4, 2, 12)) 
     
-""" SOLUTIONS FOR NON-LINEAR EQUATION """
+""" SOLUTIONS FOR NON-LINEAR EQUATIONS """
     
 # =============================================================================
 # BISECTION METHOD 
@@ -45,7 +55,7 @@ def bisection(func,lower,upper,error_upper_bound=None,i=100):
     """
     #Initiate values
     interval=[min(lower,upper),max(lower,upper)]
-    e=abs((interval[1]-interval[0])*100/interval[1])
+    e=abs((interval[1]-interval[0])/interval[1])
     
     #Correct error bounds
     if error_upper_bound==None:
@@ -74,12 +84,12 @@ def bisection(func,lower,upper,error_upper_bound=None,i=100):
             print("Bad arguments")
         else:
             #Recalculate the relative error
-            e=abs((interval[1]-interval[0])*100/interval[1])
+            e=abs((interval[1]-interval[0])/interval[1])
             
-    print("Relative error rate:{}%".format(e))
+    print("Relative error rate:{}%".format(e*100))
     return guess
 
-#print(bisection(lambda a: (a*a)-5,0,4,1e-5)
+#print(bisection(lambda a: (a*a)-5,0,4,1e-6,25))
 
 # =============================================================================
 # NEWTON-RAPHSON METHOD
@@ -108,14 +118,14 @@ def newton_raphson(func,init,error_upper_bound=None,derivative_increment=1e-10):
             while e>error_upper_bound and g1!=0:
                 guess=prev-(func(prev)/derivative(func,prev,error_percentage=derivative_increment))
                 g1=func(guess)
-                e=abs((guess-prev)*100/guess)
+                e=abs((guess-prev)/guess)
                 prev=guess
         #If the incrementation amount, while taking derivative, was too small increase the value    
         except ZeroDivisionError:
             print("Lowering derivative incrementation amount")
             return newton_raphson(func,init,error_upper_bound,derivative_increment=derivative_increment*10)
         else:
-            print("Error rate:{}%".format(e))
+            print("Relative error rate:{}%".format(e*100))
             return prev
 
 #print(newton_raphson(lambda a:(a**4)-4*(a**3)-2*a+6, 0, 1e-4, 1e-30))         
@@ -123,12 +133,50 @@ def newton_raphson(func,init,error_upper_bound=None,derivative_increment=1e-10):
 # =============================================================================
 # SECANT METHOD           
 # =============================================================================
-def secant():
-    pass        
-            
-    
-    
+def secant(func,p0,p1,error_upper_bound=None):
+    """
+    func: function
+    p0: first inital guess
+    p1: second initial guess
+    error_upper_bound: upper bound value of the relative error to make the function stop iterating 
+    """
+    try:
+        #Assertion of the parameters
+        assert p0!=p1 and (isinstance(error_upper_bound,float) or isinstance(error_upper_bound,int))
+        #Set an interval to make it easier
+    except AssertionError:
+        print("Bad arguments")
+        return None
+    else:    
+        try:
+            #Initial calculations
+            e=100
+            guess=p1-(func(p1)-(p1-p0))/(func(p1)-func(p0))
+            g=func(guess)
 
+            #Start the loop and don't stop until the desired output is reached
+            while (g!=0 and e>error_upper_bound):
+                temp=guess
+                guess=temp-(func(temp)*(temp-p1))/(func(temp)-func(p1))
+                p1=temp
+                e=abs((guess-p1)/guess)
+                g=func(guess)
+                
+        except ZeroDivisionError:
+            print("Relative error rate:{}%".format(e*100))
+            return guess
+        except Exception as err :
+            print("Something went wrong!",err)
+            return None
+        else:
+            print("Relative error rate:{}%".format(e*100))
+            return guess
 
+#print(secant(lambda a: (a**2)+6*a-13,1,3,1e-10))
+#print(secant(lambda x: ((x**2)/6)-((x-2)**3)/13,5,7,1e-10))
 
-
+# =============================================================================
+# REGULA-FALSI METHOD
+# =============================================================================
+def false_pos():
+    pass
