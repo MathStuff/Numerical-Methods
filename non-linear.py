@@ -33,9 +33,9 @@ def integral(func,a,b,seg=1e+5):
     i=a
     total=0
     while i<b:
-        total+=abs(func(i))*inc
+        total+=func(i)*inc
         i+=inc
-    return round(total,8)
+    return round(total,6)
 
 #print(derivative(lambda a:a*a -4,3))
 #print(integral(lambda a:a*a -4, 2, 12)) 
