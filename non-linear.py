@@ -163,8 +163,7 @@ def secant(func,p0,p1,error_upper_bound=None):
                 g=func(guess)
                 
         except ZeroDivisionError:
-            print("Relative error rate:{}%".format(e*100))
-            return guess
+            print("Bad interval")
         except Exception as err :
             print("Something went wrong!",err)
             return None
@@ -172,11 +171,56 @@ def secant(func,p0,p1,error_upper_bound=None):
             print("Relative error rate:{}%".format(e*100))
             return guess
 
-#print(secant(lambda a: (a**2)+6*a-13,1,3,1e-10))
-#print(secant(lambda x: ((x**2)/6)-((x-2)**3)/13,5,7,1e-10))
+#print(secant(lambda a: (a**2)+6*a-13,3,4,1e-10))
+#print(secant(lambda x: ((x**2)/6)-((x-2)**3)/13,7,8,1e-10))
 
 # =============================================================================
 # REGULA-FALSI METHOD
 # =============================================================================
-def false_pos():
-    pass
+def false_pos(func,lower,upper,error_upper_bound=None):
+ 
+    try:
+        #Assertion of the parameters
+        assert lower<upper and (isinstance(error_upper_bound,float) or isinstance(error_upper_bound,int))
+        assert func(lower)*func(upper)<=0
+    except:
+        print("Bad arguments")
+        return None
+    else:    
+        #Initial calculations and assertions
+        l=func(lower)
+        u=func(upper)
+        if u*l>0:
+            return None
+        first=1
+        e=100
+        g=-1
+        temp=0
+        
+        #Keep looping until the desired error rate is achieved
+        while g!=0 and e>error_upper_bound:
+            l=func(lower)
+            u=func(upper)
+            guess=lower-(l*(upper-lower)/(u-l))
+            
+            #Skip first loop's error calculation
+            if first:
+                first=0
+            else:
+                e=abs((guess-temp)/guess)
+            temp=guess    
+            g=func(guess)
+            
+            #Check where the root is
+            if l*g<0:
+                upper=guess
+            elif l*g>0:
+                lower=guess
+            else:
+                print("Exact root: ",guess)
+                return guess
+        #Found a root
+        print("Relative error rate: {}".format(e*100))
+        return guess
+    
+#print(false_pos(lambda a: (a**2) - (4*a) - 11, 0,8,1e-10))
