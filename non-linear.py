@@ -32,14 +32,14 @@ def integral(func,a,b,seg=1e+5):
     inc=(b-a)/seg
     i=a
     total=0
-    while i<b:
+    while i<b+inc:
         total+=func(i)*inc
         i+=inc
     return round(total,6)
 
 #print(derivative(lambda a:a*a -4,3))
 #print(integral(lambda a:a*a -4, 2, 12)) 
-    
+
 """ SOLUTIONS FOR NON-LINEAR EQUATIONS """
     
 # =============================================================================
