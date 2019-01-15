@@ -56,7 +56,7 @@ def bisection(func,lower,upper,error_upper_bound=None,i=100):
     #Initiate values
     interval=[min(lower,upper),max(lower,upper)]
     e=abs((interval[1]-interval[0])/interval[1])
-    
+    guess=(sum(interval))/2
     #Correct error bounds
     if error_upper_bound==None:
         error_upper_bound=0
@@ -85,7 +85,8 @@ def bisection(func,lower,upper,error_upper_bound=None,i=100):
         else:
             #Recalculate the relative error
             e=abs((interval[1]-interval[0])/interval[1])
-            
+    
+    print("Root is in the interval: ",interval)        
     print("Relative error rate:{}%".format(e*100))
     return guess
 
