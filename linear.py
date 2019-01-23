@@ -52,8 +52,8 @@ class linearEq:
                 
             print(" "*(tab_size-len(str(self.consts[rows][0]))),self.consts[rows][0])
         
-#e1=linearEq(Matrix(6,ranged=[-500,800]),Matrix([6,1],ranged=[-2500,5000]))
-#e1.eq
+e1=linearEq(Matrix(6,ranged=[-500,800]),Matrix([6,1],ranged=[-2500,5000]))
+e1.eq
 
 def Gauss_Siebel(coef_matrix,const_matrix,init_pred,error_upper_bound=1e-5):
     """
