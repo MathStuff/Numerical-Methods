@@ -10,7 +10,7 @@ Functions in this module:
 -Gauss-Siedel
 
 """
-from matrices import *
+from matrices import Matrix,FMatrix,Identity
 
 class linearEq:
     """
@@ -41,8 +41,8 @@ class linearEq:
         for i in range(self.coefs.dim[1]):
             print(" "*(tab_size-2),"x{0}".format(i),end="|")
             
-        print(" CONST")
-        print("*"*((tab_size+3)*self.coefs.dim[1]))
+        print(" "*(tab_size//2 - 3),"CONSTANTS")
+        print("*"*((tab_size+4)*self.coefs.dim[1]))
         
         for rows in range(self.coefs.dim[0]):
             
@@ -52,27 +52,19 @@ class linearEq:
                 
             print(" "*(tab_size-len(str(self.consts[rows][0]))),self.consts[rows][0])
         
-e1=linearEq(Matrix(6,ranged=[-500,800]),Matrix([6,1],ranged=[-2500,5000]))
+e1=linearEq(Matrix(8,ranged=[-5,5]),Matrix([8,1],ranged=[-25,50]))
 e1.eq
 
-def Gauss_Siebel(coef_matrix,const_matrix,init_pred,error_upper_bound=1e-5):
+def LU(coef_matrix,const_matrix):
+    pass
+
+def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,error_upper_bound=1e-2):
     """
     coef_matrix: Matrix that holds coefficients of the system
     const_matrix: Matrix that holds the constants/right side of the equation
     init_pred: Initial predictions for the unknowns, leave empty if not desired
     error_upper_bound: Relative error rate's upper bound to stop the iteration
     """
-    try:
-        assert isinstance(coef_matrix,Matrix) and isinstance(const_matrix,Matrix)
-        assert len(const_matrix)==coef_matrix.dim[0]
-        if init_pred==None:
-            init_pred=[1]*coef_matrix.dim[1]
-        else:
-            assert len(init_pred)==coef_matrix.dim[1]
-    except:
-        print("Bad arguments")
-    else:
-        pass
-    
-def LU(coef_matrix,const_matrix):
     pass
+    
+
