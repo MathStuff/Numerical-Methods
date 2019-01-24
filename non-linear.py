@@ -90,8 +90,8 @@ def bisection(func,lower,upper,error_upper_bound=None,i=100):
     print("Relative error rate:{}%".format(e*100))
     return guess
 
-#print(bisection(lambda a: (a*a)-5,0,4,1e-6,25))
-
+print("\nBisection method:\nFunction: x^2 - 5\nbisection(lambda a: (a*a)-5,0,4,1e-6,25)")
+print("estimate =",bisection(lambda a: (a*a)-5,0,4,1e-6,25))
 # =============================================================================
 # NEWTON-RAPHSON METHOD
 # =============================================================================
@@ -123,14 +123,14 @@ def newton_raphson(func,init,error_upper_bound=None,derivative_increment=1e-10):
                 prev=guess
         #If the incrementation amount, while taking derivative, was too small increase the value    
         except ZeroDivisionError:
-            print("Lowering derivative incrementation amount")
+            #print("Lowering derivative incrementation amount")
             return newton_raphson(func,init,error_upper_bound,derivative_increment=derivative_increment*10)
         else:
             print("Relative error rate:{}%".format(e*100))
             return prev
 
-#print(newton_raphson(lambda a:(a**4)-4*(a**3)-2*a+6, 0, 1e-4, 1e-30))         
-
+print("\nNewton Raphson method:\nFunction: x^4 - 4(x^3) - 2*x + 6\nnewton_raphson(lambda a:(a**4)-4*(a**3)-2*a+6, 0, 1e-10, 1e-30)")
+print("estimate =",newton_raphson(lambda a:(a**4)-4*(a**3)-2*a+6, 0, 1e-10))
 # =============================================================================
 # SECANT METHOD           
 # =============================================================================
@@ -172,9 +172,8 @@ def secant(func,p0,p1,error_upper_bound=None):
             print("Relative error rate:{}%".format(e*100))
             return guess
 
-#print(secant(lambda a: (a**2)+6*a-13,3,4,1e-10))
-#print(secant(lambda x: ((x**2)/6)-((x-2)**3)/13,7,8,1e-10))
-
+print("\nSecant method:\nFunction: (x^2)/6 - ((x-2)^3)/13\nsecant(lambda x: ((x**2)/6)-((x-2)**3)/13,7,8,1e-10)")
+print("estimate =",secant(lambda x: ((x**2)/6)-((x-2)**3)/13,7,8,1e-10))
 # =============================================================================
 # REGULA-FALSI METHOD
 # =============================================================================
@@ -224,4 +223,5 @@ def false_pos(func,lower,upper,error_upper_bound=None):
         print("Relative error rate: {}".format(e*100))
         return guess
     
-#print(false_pos(lambda a: (a**2) - (4*a) - 11, 0,8,1e-10))
+print("\nRegula-Falsi method:\nFunction: (x^2) - 4*x - 11\nfalse_pos(lambda a: (a**2) - (4*a) - 11, 0,8,1e-10)")
+print("estimate =",false_pos(lambda a: (a**2) - (4*a) - 11, 0,8,1e-10))
