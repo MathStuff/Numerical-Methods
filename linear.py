@@ -48,12 +48,15 @@ class linearEq:
             
             for unknowns in range(self.coefs.dim[1]):
                 num=self.coefs[rows][unknowns]
-                print(" "*(tab_size-len(str(num))),num,end="|")   
+                print(" "*(tab_size-len(str(num))+len(str(unknowns))-1),num,end="|")   
                 
             print(" "*(tab_size-len(str(self.consts[rows][0]))),self.consts[rows][0])
-
-
+        print("")
 def LU(coef_matrix,const_matrix):
+    """
+    coef_matrix: Coefficient matrix of the linear system
+    const_matrix: Right-hand side of the equations in a column matrix
+    """
     try:
         assert coef_matrix.dim[0]==coef_matrix.dim[1] and coef_matrix.dim[1]==const_matrix.dim[0] and const_matrix.dim[1]==1
         L=coef_matrix.lowtri.copy
@@ -81,11 +84,12 @@ def LU(coef_matrix,const_matrix):
                 X[-xs][0]-=U[-xs][-rest]*X[-rest][0]/U[-xs][-xs]
         for i in range(X.dim[0]):
             print("x{} =".format(i),X[i][0])
+        print("")
         return X
 
-def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=2):
+def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
     """
-    ***DOESN'T WORK***
+    max(coef_matrix.eigenvalues)<1 IS REQUIRED FOR THIS METHOD TO CONVERGE THEREFORE WORK AS INTENDED
     coef_matrix: Matrix that holds coefficients of the system
     const_matrix: Matrix that holds the constants/right side of the equation
     init_pred: Initial predictions for the unknowns, leave empty if not desired
@@ -104,7 +108,7 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=2):
                     print("0 on diagonal, swapping rows")
                     i2=i
                     while matr1[i2][i]==0:
-                        i2+=1
+                        i2-=1
                     temp=matr1[i][:]
                     matr1[i]=matr1[i2][:]
                     matr1[i2]=temp
@@ -120,37 +124,45 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=2):
     try:
         assert coef_matrix.dim[0]==coef_matrix.dim[1] and coef_matrix.dim[1]==const_matrix.dim[0] and const_matrix.dim[1]==1
         assert diagonalCheck(coef_matrix,const_matrix)==True
-
+        assert coef_matrix.det!=0
         if init_pred!=None:
             assert isinstance(init_pred,list)
             assert len(init_pred)==coef_matrix.dim[1]
         else:
-            init_pred=[1]*coef_matrix.dim[1]
+            init_pred=[0]*coef_matrix.dim[1]
         iters=0
-
         while iters<iterations:
-
-            for i in range(coef_matrix.dim[0]):
+            for i in range(coef_matrix.dim[1]):
                 num=0
-                for j in range(coef_matrix.dim[0]):
+                for j in range(coef_matrix.dim[1]):
                     if j==i:
                         continue
                     else:
                         num+=coef_matrix[i][j]*init_pred[j]
                 init_pred[i]=(const_matrix[i][0]-num)/coef_matrix[i][i]
             iters+=1
-
     except Exception as err:
         print(err)
     else:
+        print("")
+        total=0
         for i in range(const_matrix.dim[0]):
             print("x{} =".format(i),init_pred[i])
+            total+=init_pred[i]*coef_matrix[0][i]
+        print("Error rate:{}%".format(abs((total-const_matrix[0][0])/total)*100))
+        print("")
         return FMatrix([const_matrix.dim[0],1],listed=[init_pred])
 
-print("Data table:")
-e1=linearEq(Matrix(5,ranged=[-5,5]),Matrix([5,1],ranged=[-15,10]))
-e1.eq    
+#EXAMPLES
+e1=linearEq(Matrix(5,ranged=[-15,15]),Matrix([5,1],ranged=[-55,50]))
+e1.eq   
+LU(e1.coefs,e1.consts)
 
-answerLU=LU(e1.coefs,e1.consts)
+print("################################################\n")
+e2=linearEq(Matrix(3,listed="4 -1 -1 -2 6 1 -1 1 7"),Matrix([3,1],listed="3 9 -6"))
+e2.eq
 
-#answerGS=Gauss_Siebel(e1.coefs,e1.consts)
+print("LU answer:")
+answerLU=LU(e2.coefs,e2.consts)
+print("GS estimation after 5 iterations:")
+answerGS=Gauss_Siebel(e2.coefs,e2.consts,iterations=5)

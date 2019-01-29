@@ -11,3 +11,16 @@ Models in this module:
 -Exponential regression
     
 """
+class dataTable:
+    def __init__(self,xs=None,ys=None,Dict=None):
+        self.xs=xs
+        self.ys=ys
+        self.Dict=Dict
+    
+    @property
+    def p(self):
+        if self.Dict!=None:
+            pass
+        else:
+            pass
+                
