@@ -5,10 +5,11 @@ function root = bisection(fun,low,up,iters)
 %   upper:upper bound
 %   iters:iteration amount  
 %   EXAMPLE:
-%       bisection_answer=bisection(@(a) a*a*a-29,0,4,16)
+%       bisection_answer=bisection(@(a) a*a*a-29,0,4,16) == 3.0723
     %%%%%CHECK_INTERVAL%%%%%
     if fun(low)*fun(up)>0
-        fprintf("Not in the interval");
+        fprintf("Not in the interval\n");
+        iters=0;
     end
 
     while iters>0
@@ -38,4 +39,3 @@ function root = bisection(fun,low,up,iters)
         %%%%%%%%%%%%%%%%
     end
 end
-
