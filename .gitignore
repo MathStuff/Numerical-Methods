@@ -1,0 +1,22 @@
+#Python cache stuff
+__pycache__/
+
+#Local tests and enviroments
+tests/
+venv/
+env/
+
+#Dist files and vscode files
+.eggs/
+*.egg-info/
+dist/
+build/
+sdist/
+.vscode/
+
+#Compiled .pyd files and generated C files
+*.pyd
+*.c
+
+#Scripts etc.
+*.vbs
