@@ -47,10 +47,10 @@ class linearEq:
         for rows in range(self.coefs.dim[0]):
             
             for unknowns in range(self.coefs.dim[1]):
-                num=self.coefs[rows][unknowns]
+                num=self.coefs.matrix[rows][unknowns]
                 print(" "*(tab_size-len(str(num))+len(str(unknowns))-1),num,end="|")   
                 
-            print(" "*(tab_size-len(str(self.consts[rows][0]))),self.consts[rows][0])
+            print(" "*(tab_size-len(str(self.consts.matrix[rows][0]))),self.consts.matrix[rows][0])
         print("")
 def LU(coef_matrix,const_matrix):
     """
@@ -59,8 +59,10 @@ def LU(coef_matrix,const_matrix):
     """
     try:
         assert coef_matrix.dim[0]==coef_matrix.dim[1] and coef_matrix.dim[1]==const_matrix.dim[0] and const_matrix.dim[1]==1
-        L=coef_matrix.lowtri.copy
-        U=coef_matrix.uptri.copy
+        
+        L=coef_matrix.lowtri
+        U=coef_matrix.uptri
+        
         #UX=Y & LY=B
         X=Matrix([L.dim[0],1],fill=0,decimal=8)
         Y=Matrix([U.dim[0],1],fill=0,decimal=8)
@@ -74,17 +76,23 @@ def LU(coef_matrix,const_matrix):
         print("")
         #Solve LY=B using forward substitution
         for ys in range(B.dim[0]):
-            Y[ys][0]=B[ys][0]
+            
+            Y.matrix[ys][0] = B.matrix[ys][0]
+            
             for rest in range(ys):
-                Y[ys][0]-=L[ys][ys-rest-1]*Y[ys-rest-1][0]
+                Y.matrix[ys][0] -= L.matrix[ys][ys-rest-1]*Y.matrix[ys-rest-1][0]
         #Solve UX=Y using backward substitution
         for xs in range(1,Y.dim[0]+1):
-            X[-xs][0]=Y[-xs][0]/U[-xs][-xs]
+            
+            X.matrix[-xs][0] = Y.matrix[-xs][0]/U.matrix[-xs][-xs]
+            
             for rest in range(1,xs):
-                X[-xs][0]-=U[-xs][-rest]*X[-rest][0]/U[-xs][-xs]
+                X.matrix[-xs][0] -= U.matrix[-xs][-rest] * X.matrix[-rest][0]/U.matrix[-xs][-xs]
+                
         for i in range(X.dim[0]):
-            print("x{} =".format(i),X[i][0])
+            print("x{} =".format(i),X.matrix[i][0])
         print("")
+        
         return X
 
 def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
@@ -104,18 +112,18 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
         else:
             i=0
             while i<matr1.dim[0]:
-                if matr1[i][i]==0:
+                if matr1.matrix[i][i]==0:
                     print("0 on diagonal, swapping rows")
                     i2=i
-                    while matr1[i2][i]==0:
+                    while matr1.matrix[i2][i]==0:
                         i2-=1
-                    temp=matr1[i][:]
-                    matr1[i]=matr1[i2][:]
-                    matr1[i2]=temp
+                    temp=matr1.matrix[i][:]
+                    matr1.matrix[i]=matr1.matrix[i2][:]
+                    matr1.matrix[i2]=temp
                     
-                    temp=matr2[i][0]
-                    matr2[i][0]=matr2[i2][0]
-                    matr2[i2][0]=temp
+                    temp=matr2.matrix[i][0]
+                    matr2.matrix[i][0]=matr2.matrix[i2][0]
+                    matr2.matrix[i2][0]=temp
                     
                     return diagonalCheck(matr1,matr2)
                 i+=1
@@ -125,22 +133,29 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
         assert coef_matrix.dim[0]==coef_matrix.dim[1] and coef_matrix.dim[1]==const_matrix.dim[0] and const_matrix.dim[1]==1
         assert diagonalCheck(coef_matrix,const_matrix)==True
         assert coef_matrix.det!=0
+        
         if init_pred!=None:
             assert isinstance(init_pred,list)
             assert len(init_pred)==coef_matrix.dim[1]
         else:
             init_pred=[0]*coef_matrix.dim[1]
         iters=0
+        
         while iters<iterations:
+            
             for i in range(coef_matrix.dim[1]):
                 num=0
+                
                 for j in range(coef_matrix.dim[1]):
                     if j==i:
                         continue
                     else:
-                        num+=coef_matrix[i][j]*init_pred[j]
-                init_pred[i]=(const_matrix[i][0]-num)/coef_matrix[i][i]
+                        num+=coef_matrix.matrix[i][j]*init_pred[j]
+                        
+                init_pred[i]=(const_matrix.matrix[i][0]-num)/coef_matrix.matrix[i][i]
+                
             iters+=1
+            
     except Exception as err:
         print(err)
     else:
@@ -148,9 +163,11 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
         total=0
         for i in range(const_matrix.dim[0]):
             print("x{} =".format(i),init_pred[i])
-            total+=init_pred[i]*coef_matrix[0][i]
-        print("Error rate:{}%".format(abs((total-const_matrix[0][0])/total)*100))
+            total += init_pred[i]*coef_matrix.matrix[0][i]
+            
+        print("Error rate:{}%".format(abs((total-const_matrix.matrix[0][0])/total)*100))
         print("")
+        
         return Matrix([const_matrix.dim[0],1],listed=[init_pred])
 
 #EXAMPLES
