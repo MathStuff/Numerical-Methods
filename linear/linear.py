@@ -10,7 +10,7 @@ Functions in this module:
 -Gauss-Siedel
 
 """
-from matrices import Matrix,FMatrix,Identity
+from MatricesM.matrix import Matrix
 
 class linearEq:
     """
@@ -62,8 +62,8 @@ def LU(coef_matrix,const_matrix):
         L=coef_matrix.lowtri.copy
         U=coef_matrix.uptri.copy
         #UX=Y & LY=B
-        X=FMatrix(dim=[L.dim[0],1],randomFill=0,decimal=8)
-        Y=FMatrix(dim=[U.dim[0],1],randomFill=0,decimal=8)
+        X=Matrix([L.dim[0],1],fill=0,decimal=8)
+        Y=Matrix([U.dim[0],1],fill=0,decimal=8)
         B=const_matrix.copy
     except AttributeError:
         print("System has infinite solutions")
@@ -97,7 +97,7 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
     """
     def diagonalCheck(matr1,matr2):
         try:
-            assert isinstance(matr1,Matrix) or isinstance(matr1,FMatrix)
+            assert isinstance(matr1,Matrix)
         except:
             print("err")
             return False
@@ -151,7 +151,7 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
             total+=init_pred[i]*coef_matrix[0][i]
         print("Error rate:{}%".format(abs((total-const_matrix[0][0])/total)*100))
         print("")
-        return FMatrix([const_matrix.dim[0],1],listed=[init_pred])
+        return Matrix([const_matrix.dim[0],1],listed=[init_pred])
 
 #EXAMPLES
 e1=linearEq(Matrix(5,ranged=[-15,15]),Matrix([5,1],ranged=[-55,50]))
