@@ -10,7 +10,7 @@ Functions in this module:
 -Gauss-Siedel
 
 """
-from MatricesM.matrix import Matrix
+from MatricesM.matrix import *
 
 class linearEq:
     """
