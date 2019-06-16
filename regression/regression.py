@@ -11,32 +11,28 @@ Models in this module:
 -Exponential regression
     
 """
-from matrices import Matrix,FMatrix,Identity
+from MatricesM import *
 
-class dataTable:
+def linear_reg(xs,ys):
     """
-    xs:list if only 1 variable is given, matrix or dictionary if multiple variables are given
-    ys:list or column matrix of real numbers
-    Dict: data in a dictionary; keys are the variables except the last key being the value to predict
-        Example = N columns of data to be treated as :
-            {var1:[real numbers], var2:[real numbers], ... , var(N-1):[real numbers],value_to_pred:[real numbers]}
-            
+    xs: Matrix; Values to use for prediction
+    ys: Matrix; Values to be predicted
+    Returns in a tuple -> (Coefficients,Predictions,Errors)
     """
-    def __init__(self,xs=None,ys=None,Dict=None):
-        try:
-            self.xs=xs
-            self.ys=ys
-            self.Dict=Dict
-            if isinstance(xs,list):
-                if isinstance(ys,list):
-                    self.ys=FMatrix([len(ys),1],listed=ys)    
-                
-                assert len(xs)
-                self.xs
-    @property
-    def p(self):
-        if self.Dict!=None:
-            pass
-        else:
-            pass
-                
+    #Coefficients
+    coefs = (((xs.t@xs).inv)@xs.t)@ys
+    #Re-name coefficient matrix's columns and also dtype (to display column names)
+    coefs.dtype = dataframe
+    coefs.features = [ys.features[i]+" coefficient" for i in range(coefs.dim[1])]
+    
+    #Predict values
+    preds = xs@coefs
+    #Re-name prediction matrix's columns
+    preds.features = [ys.features[i]+" prediction" for i in range(preds.dim[1])]
+                      
+    #Errors
+    err = ys-preds
+    #Re-name error matrix's columns
+    err.features = [ys.features[i]+" error" for i in range(err.dim[1])]
+    
+    return (coefs,preds,err)
