@@ -60,8 +60,8 @@ def LU(coef_matrix,const_matrix):
     try:
         assert coef_matrix.dim[0]==coef_matrix.dim[1] and coef_matrix.dim[1]==const_matrix.dim[0] and const_matrix.dim[1]==1
         
-        L=coef_matrix.lowtri
-        U=coef_matrix.uptri
+        L=coef_matrix.L
+        U=coef_matrix.U
         
         #UX=Y & LY=B
         X=Matrix([L.dim[0],1],fill=0,decimal=8)
@@ -168,7 +168,7 @@ def Gauss_Siebel(coef_matrix,const_matrix,init_pred=None,iterations=25):
         print("Error rate:{}%".format(abs((total-const_matrix.matrix[0][0])/total)*100))
         print("")
         
-        return Matrix([const_matrix.dim[0],1],listed=[init_pred])
+        return Matrix([const_matrix.dim[0],1],data=[init_pred])
 
 #EXAMPLES
 e1=linearEq(Matrix(5,ranged=[-15,15]),Matrix([5,1],ranged=[-55,50]))
@@ -176,7 +176,7 @@ e1.eq
 LU(e1.coefs,e1.consts)
 
 print("################################################\n")
-e2=linearEq(Matrix(3,listed="4 -1 -1 -2 6 1 -1 1 7"),Matrix([3,1],listed="3 9 -6"))
+e2=linearEq(Matrix(3,data="4 -1 -1 -2 6 1 -1 1 7"),Matrix([3,1],data="3 9 -6"))
 e2.eq
 
 print("LU answer:")
