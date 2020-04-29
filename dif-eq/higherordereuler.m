@@ -1,6 +1,6 @@
 function [pred,real_sol,abs_err,rel_err] = higherordereuler(a,b,n)
     % Fill in the blanks (...) 
-    % Applicable format : y' = f(t,y), y(a) = c1, y'(a) = c2, y''(a) = c3, ..., y = y(t), t>=a & t<=b
+    % y(a) = c1, y'(a) = c2, y''(a) = c3, ..., y = y(t), t>=a & t<=b
 
     h = (b-a)/n;     % length of each sub-interval
 
@@ -9,7 +9,7 @@ function [pred,real_sol,abs_err,rel_err] = higherordereuler(a,b,n)
     f2 = @(t,x,z) ... ;     % z' = y'' = f(t,y)
     
     %Increment MANUALLY
-    func_amount = 2;  %how many functions used
+    func_amount = 2;  %how many functions were used
         
     pred = zeros(n+1,func_amount);
     
@@ -30,7 +30,7 @@ function [pred,real_sol,abs_err,rel_err] = higherordereuler(a,b,n)
     
     pred = (pred(:,1:1))'; % get the actual prediction columns and transpose
     
-    real_sol = ... ; % Real solution
+    real_sol = ... ; % Analytic solution
     
     abs_err = abs(real_sol-pred);
     
