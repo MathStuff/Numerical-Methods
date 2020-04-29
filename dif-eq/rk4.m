@@ -18,7 +18,7 @@ function [pred,real_sol,abs_err,rel_err] = rk4(a,b,n)
         k1 = f(prev_t,prev_y);
         k2 = f(prev_t+(h/2),prev_y+(h/2)*k1);
         k3 = f(prev_t+(h/2),prev_y+(h/2)*k2);
-        k4 = f(prev_t+(h/2),prev_y+h*k3);
+        k4 = f(prev_t+h,prev_y+h*k3);
         
         pred(i) = prev_y + (h/6)*(k1+2*k2+2*k3+k4);
     end
